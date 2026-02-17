@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine?</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffe6f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+  h1 {
+    color: #ff0066;
+    margin-bottom: 20px;
+  }
+  video {
+    width: 90%;
+    max-width: 400px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+  .btn-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 120px;
+  }
+  button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.1s ease;
+    position: absolute;
+  }
+  #yes {
+    background-color: #ff3366;
+    color: white;
+    left: 30%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #no {
+    background-color: #33cc33;
+    color: white;
+    left: 70%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 2s linear forwards;
+  }
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-200px) scale(2); }
+  }
+</style>
+</head>
+<body>
+<h1>Would you be Kings Valentine 😊</h1>
+<video autoplay muted loop>
+  <source src="https://media.giphy.com/media/3o6Zt8MgUuvSbkZYWc/giphy.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<div class="btn-container">
+  <button id="yes">Yes 😍</button>
+  <button id="no">No 😢</button>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+let speed = 50; // starting escape speed
+let vx = speed, vy = speed; // velocity for bouncing
+let container = document.querySelector(".btn-container");
+
+// Get container dimensions
+let containerRect = container.getBoundingClientRect();
+
+// Initialize No button position
+let noPos = { x: noBtn.offsetLeft, y: noBtn.offsetTop };
+
+// Update button container size on resize
+window.addEventListener("resize", () => {
+  containerRect = container.getBoundingClientRect();
+});
+
+// Move No button on hover
+noBtn.addEventListener("mouseenter", () => {
+  // Random direction and speed increase
+  vx = (Math.random() > 0.5 ? 1 : -1) * speed;
+  vy = (Math.random() > 0.5 ? 1 : -1) * speed;
+  speed += 5; // faster each hover
+});
+
+// Animate No button bouncing
+function animateNo() {
+  noPos.x += vx;
+  noPos.y += vy;
+
+  // Bounce off edges
+  if (noPos.x < 0 || noPos.x + noBtn.offsetWidth > containerRect.width) vx = -vx;
+  if (noPos.y < 0 || noPos.y + noBtn.offsetHeight > containerRect.height) vy = -vy;
+
+  noBtn.style.left = noPos.x + "px";
+  noBtn.style.top = noPos.y + "px";
+
+  requestAnimationFrame(animateNo);
+}
+animateNo();
+
+// Yes button click action
+yesBtn.addEventListener("click", () => {
+  alert("Aww 😍 You chose yes! Kings heart is happy 💖");
+  createHearts(30); // create hearts on click
+  playSound(); // play boop sound
+});
+
+// Create floating hearts
+function createHearts(num) {
+  for (let i = 0; i < num; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight + "px";
+    heart.style.color = "red";
+    heart.textContent = "💖";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+  }
+}
+
+// Optional sound effect
+function playSound() {
+  const audio = new Audio("https://www.myinstants.com/media/sounds/boop.mp3");
+  audio.play();
+}
+</script>
+</body>
+</html>
